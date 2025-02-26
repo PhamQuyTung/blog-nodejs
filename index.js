@@ -1,12 +1,12 @@
 const express = require("express");
+var morgan = require("morgan");
 const app = express();
 const port = 3003;
 
+app.use(morgan("combined"));
+
 app.get("/", (req, res) => {
-  var a = 3;
-  var b = 4;
-  var c = a + b;
-  res.send("Xây dựng trang blog với F8!" );
+  res.send("Xây dựng trang blog với F8!");
 });
 
 app.listen(port, () => {
