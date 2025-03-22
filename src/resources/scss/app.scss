@@ -1,9 +1,9 @@
 @use "variables" as var;
 
 h1 {
-  color: var.$blue-color;
+  color: var.$blue-color !important;
 }
 
 h2 {
-  color: yellow;
+  color: yellow !important;
 }
