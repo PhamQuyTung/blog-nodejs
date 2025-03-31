@@ -4,6 +4,7 @@
   "description": "Blog bài viết nodejs",
   "main": "src/index.js",
   "scripts": {
+    "beautifull": "lint-staged",
     "start": "nodemon --inspect src/index.js",
     "watch": "sass src/resources/scss:src/public/css --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -31,8 +32,19 @@
     "mongoose": "^8.12.1",
     "sass": "^1.85.1"
   },
+  "lint-staged": {
+    "src/**/*.{js,json,scss}": "prettier --single-quote --tab-width 4 --trailing-comma all --write"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
     "morgan": "^1.10.0",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "prettier": "^3.5.3"
   }
 }

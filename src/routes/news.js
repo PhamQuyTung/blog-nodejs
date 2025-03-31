@@ -1,11 +1,11 @@
 // File: src/routes/news.js
-// File này được sử dụng để định nghĩa các tuyến đường liên quan đến tin tức trong ứng dụng Express.js. 
+// File này được sử dụng để định nghĩa các tuyến đường liên quan đến tin tức trong ứng dụng Express.js.
 
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
 // Import controller cho tin tức
-const newsController = require('../app/controllers/NewsController'); 
+const newsController = require('../app/controllers/NewsController');
 
 // Định nghĩa tuyến đường cho trang chi tiết tin tức
 router.use('/:slug', newsController.show);

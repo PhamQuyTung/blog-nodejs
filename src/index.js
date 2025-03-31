@@ -13,13 +13,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Middleware to parse JSON request bodies
 app.use(express.json());
 app.use(
-    express.urlencoded({
-        extended: true,
-    }),
+      express.urlencoded({
+            extended: true,
+      }),
 );
 
 // HTTP logger
-app.use(morgan('combined'));
+      app.use(morgan('combined'));
 
 // Cấu hình Handlebars với đuôi `.hbs`
 app.engine('hbs', engine({ extname: '.hbs' }));
