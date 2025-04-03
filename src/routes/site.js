@@ -8,8 +8,8 @@ const router = express.Router();
 const siteController = require('../app/controllers/SiteController');
 
 // Định nghĩa tuyến đường cho trang search
-router.use('/search', siteController.search);
+router.get('/search', siteController.search);
 // Định nghĩa tuyến đường cho trang home
-router.use('/', siteController.index);
+router.get('/', siteController.index);
 
 module.exports = router;

@@ -8,8 +8,8 @@ const router = express.Router();
 const newsController = require('../app/controllers/NewsController');
 
 // Định nghĩa tuyến đường cho trang chi tiết tin tức
-router.use('/:slug', newsController.show);
+router.get('/:slug', newsController.show);
 // Định nghĩa tuyến đường cho trang tin tức
-router.use('/', newsController.index);
+router.get('/', newsController.index);
 
 module.exports = router;
