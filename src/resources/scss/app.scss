@@ -1,13 +1,91 @@
 @use 'variables' as var;
 
-h1 {
-    color: var.$blue-color !important;
-}
-
-h2 {
-    color: yellow !important;
-}
-
 .bg-ColorFull {
     background-color: rgb(255, 162, 0);
+}
+
+.card-link {
+    text-decoration: none;
+    color: #000;
+}
+
+.card-title {
+    color: rgb(0, 115, 255) !important;
+}
+
+.footer {
+    background: #222;
+    color: #fff;
+    padding: 40px 0;
+    font-size: 14px;
+
+    .container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 0 20px;
+    }
+
+    &__row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    &__column {
+        width: 22%;
+        min-width: 200px;
+
+        h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #555;
+            padding-bottom: 5px;
+        }
+
+        p {
+            font-size: 14px;
+            color: #bbb;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+
+            li {
+                margin: 8px 0;
+
+                a {
+                    color: #bbb;
+                    text-decoration: none;
+                    transition: 0.3s;
+
+                    &:hover {
+                        color: #fff;
+                    }
+                }
+            }
+        }
+    }
+
+    &__social {
+        a {
+            color: #bbb;
+            font-size: 18px;
+            margin-right: 10px;
+            transition: 0.3s;
+
+            &:hover {
+                color: #fff;
+            }
+        }
+    }
+
+    &__copyright {
+        text-align: center;
+        margin-top: 20px;
+        padding-top: 10px;
+        border-top: 1px solid #444;
+        font-size: 12px;
+        color: #aaa;
+    }
 }

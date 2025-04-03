@@ -1,11 +1,13 @@
 // mục đích để chuyển hết cấu hình tuyến đường app.get, app.post, ... vào trong file này
 const newsRouter = require('./news'); // Import router từ file news.js
+const coursesRouter = require('./courses'); // Import router từ file courses.js
 const siteRouter = require('./site'); // Import router từ file site.js
 const port = 3003; // Default port
 
 function route(app) {
     // Các dòng code xử lý tuyến đư��ng vào đây
     app.use('/news', newsRouter); // Sử dụng router cho tuyến đường news page `/news`
+    app.use('/courses', coursesRouter); // Sử dụng router cho tuyến đường news courses `/news`
 
     app.use('/', siteRouter); // Sử dụng router cho tuyến đường home page `/`
 
