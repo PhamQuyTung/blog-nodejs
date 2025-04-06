@@ -1,0 +1,40 @@
+<html lang='en'>
+    <head>
+        <meta charset='UTF-8' />
+        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+        <title>F8-Education</title>
+    </head>
+    <body>
+        <div class='m-4'>
+            <h2>Trang tạo khóa học</h2>
+            <form class='mt-4' action='/courses/store' method='POST'>
+                <div class='mb-3'>
+                    <label for='name' class='form-label'>Tên khóa học</label>
+                    <input type='text' class='form-control' name="name" id='name' />
+                </div>
+
+                <div class='mb-3'>
+                    <label for='description' class='form-label'>Mô tả</label>
+                    <input type='text' class='form-control' name="description" id='description' />
+                </div>
+
+                <div class='mb-3'>
+                    <label for='videoId' class='form-label'>VideoId</label>
+                    <input type='text' class='form-control' name="videoId" id='videoId' />
+                </div>
+
+                <div class='mb-3'>
+                    <label for='level' class='form-label'>Trình độ</label>
+                    <input type='text' class='form-control' name="level" id='level' />
+                </div>
+
+                <div class='mb-3'>
+                    <label for='cost' class='form-label'>Giá tiền (đ)</label>
+                    <input type='number' class='form-control' name="cost" id='cost' />
+                </div>
+
+                <button type='submit' class='btn btn-primary mt-4'>Tạo khóa học</button>
+            </form>
+        </div>
+    </body>
+</html>
