@@ -5,26 +5,35 @@
         <title>F8-Education</title>
     </head>
     <body>
-        <div class='container'>
-            <div class='row'>
-                {{#each courses}}
-                    <div class='col l-3 m-6 c-12'>
-                        <div class='mt-4'>
-                            <a href='/courses/{{this.slug}}' class='card-link'>
-                                <div class='card' style='width: 18rem;'>
-                                    <img src={{this.image}} class='card-img-top' alt={{this.name}}/>
-                                    <div class='card-body'>
-                                        <h5 class='card-title'>{{this.name}}</h5>
-                                        <p class='card-text'>{{this.description}}</p>
-                                        <p class='card-text'>{{this.cost}}đ</p>
-                                        <p class='card-text'>Trình độ: {{this.level}}</p>
-                                        <a href='/courses/{{this.slug}}' class='btn btn-primary mt-4'>Học ngay</a>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
+        <div class="main-home">
+            <div class="container mt-5">
+                <div class="row">
+                    <div class="col l-12 m-12 c-12">
+                        <h1 class="main-home__title">Khóa học nổi bật</h1>
                     </div>
-                {{/each}}
+                </div>
+            </div>
+            <div class='container'>
+                <div class='row'>
+                    {{#each courses}}
+                        <div class='col l-3 m-6 c-12'>
+                            <div class='mt-4'>
+                                <a href='/courses/{{this.slug}}' class='card-link'>
+                                    <div class='card card-hover' style='width: 18rem;'>
+                                        <img src={{this.image}} class='card-img-top' alt={{this.name}}/>
+                                        <div class='card-body'>
+                                            <h6 class='card-title'>{{this.name}}</h6>
+                                            {{!-- <p class='card-text'>{{this.description}}</p> --}}
+                                            <p class='card-cost'>{{this.cost}}đ</p>
+                                            {{!-- <p class='card-text'>Trình độ: {{this.level}}</p> --}}
+                                            <a href='/courses/{{this.slug}}' class='btn btn-primary mt-4'>Học ngay</a>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
             </div>
         </div>
     </body>

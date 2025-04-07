@@ -3,10 +3,10 @@
     <table class='table'>
         <thead>
             <tr>
-                <th scope='col'>#</th>
+                <th scope='col'>STT</th>
                 <th scope='col'>Tên khóa học</th>
                 <th scope='col'>Trình độ</th>
-                <th scope='col'>Giá tiền</th>
+                <th scope='col'>Giá (đ)</th>
                 <th scope='col'>Thời gian tạo</th>
                 <th scope='col' colspan='3'></th>
             </tr>
@@ -18,7 +18,7 @@
                     <td>{{this.name}}</td>
                     <td>{{this.level}}</td>
                     <td>{{this.cost}}</td>
-                    <td>{{this.createdAt}}</td>
+                    <td>{{formatDate this.createdAt}}</td>
                     <td>
                         <a
                             href='/courses/{{this.slug}}'

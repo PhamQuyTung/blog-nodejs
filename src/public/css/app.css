@@ -1,5 +1,30 @@
+@charset "UTF-8";
 .bg-ColorFull {
   background-color: rgb(255, 162, 0);
+}
+
+.card {
+  border-radius: 10px !important;
+  transition: all 0.3s ease; /* Chuyển đổi mượt mà */
+}
+
+.card-hover:hover {
+  transform: scale(1.05); /* Phóng to card */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Thêm bóng đổ khi hover */
+}
+
+.card,
+.card-link,
+.card-img-top {
+  border-radius: 10px !important;
+  border: none !important;
+}
+
+.card-img-top {
+  border-top-right-radius: 10px !important;
+  border-top-left-radius: 10px !important;
+  border-bottom-left-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
 }
 
 .card-link {
@@ -7,8 +32,19 @@
   color: #000;
 }
 
+.card-body {
+  background-color: #f7f7f7;
+  border-bottom-left-radius: 10px !important;
+  border-bottom-right-radius: 10px !important;
+}
+
 .card-title {
   color: rgb(0, 115, 255) !important;
+}
+
+.card-cost {
+  color: #F05123;
+  font-weight: 600;
 }
 
 .footer {
