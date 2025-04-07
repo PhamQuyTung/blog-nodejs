@@ -30,7 +30,7 @@ class CourseController {
         const course = new Course(formData);
         course
             .save()
-            .then(() => res.redirect('/'))
+            .then(() => res.redirect('/?message=create-success'))
             .catch((error) => {
                 if (error.name === 'ValidationError') {
                     return res
@@ -57,16 +57,16 @@ class CourseController {
     // [PUT] /courses/:id
     update(req, res, next) {
         Course.updateOne({ _id: req.params.id }, req.body)  // req.body là dữ liệu từ form và req.params.id là id của khóa học cần cập nhật
-            .then(() => res.redirect('/me/stored/courses'))
+            .then(() => res.redirect('/me/stored/courses?message=update-success'))
             .catch(next);
     }
 
     // [DELETE] /courses/:id
-    // delete(req, res, next) {
-    //     Course.delete({ _id: req.params.id })
-    //         .then(() => res.redirect('back'))
-    //         .catch(next);
-    // }
+    destroy(req, res, next) {
+        Course.deleteOne({ _id: req.params.id })
+            .then(() => res.redirect('/me/stored/courses?message=delete-success'))
+            .catch(next);
+    }
 }
 
 module.exports = new CourseController();

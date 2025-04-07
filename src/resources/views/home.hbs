@@ -17,7 +17,7 @@
                                         <h5 class='card-title'>{{this.name}}</h5>
                                         <p class='card-text'>{{this.description}}</p>
                                         <p class='card-text'>{{this.cost}}đ</p>
-                                        {{!-- <p class='card-text'>Trình độ: {{this.level}}</p> --}}
+                                        <p class='card-text'>Trình độ: {{this.level}}</p>
                                         <a href='/courses/{{this.slug}}' class='btn btn-primary mt-4'>Học ngay</a>
                                     </div>
                                 </div>
@@ -28,4 +28,19 @@
             </div>
         </div>
     </body>
+
+    <!-- jQuery cần được load đầu tiên -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Toastr cần jQuery nên đặt sau -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const message = urlParams.get('message');
+
+        if (message === 'create-success') {
+            toastr.success('Thêm khóa học thành công!');
+        }
+    </script>
 </html>

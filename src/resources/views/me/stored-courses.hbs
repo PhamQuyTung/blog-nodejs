@@ -8,28 +8,129 @@
                 <th scope='col'>Trình độ</th>
                 <th scope='col'>Giá tiền</th>
                 <th scope='col'>Thời gian tạo</th>
-                <th scope='col' colspan="3"></th>
+                <th scope='col' colspan='3'></th>
             </tr>
         </thead>
         <tbody>
             {{#each courses}}
-            <tr>
-                <th scope='row'>{{inc @index}}</th>
-                <td>{{this.name}}</td>
-                <td>{{this.level}}</td>
-                <td>{{this.cost}}</td>
-                <td>{{this.createdAt}}</td>
-                <td>
-                    <a href='/courses/{{this.slug}}' class='btn btn-primary'>Xem</a>
-                </td>
-                <td>
-                    <a href='/courses/{{this._id}}/edit' class='btn btn-warning'>Sửa</a>
-                </td>
-                <td>
-                    <a href='/courses/{{this._id}}/delete' class='btn btn-danger'>Xóa</a>
-                </td>
-            </tr>
+                <tr>
+                    <th scope='row'>{{inc @index}}</th>
+                    <td>{{this.name}}</td>
+                    <td>{{this.level}}</td>
+                    <td>{{this.cost}}</td>
+                    <td>{{this.createdAt}}</td>
+                    <td>
+                        <a
+                            href='/courses/{{this.slug}}'
+                            class='btn btn-primary'
+                        >
+                            Xem
+                        </a>
+                    </td>
+                    <td>
+                        <a
+                            href='/courses/{{this._id}}/edit'
+                            class='btn btn-warning'
+                        >
+                            Sửa
+                        </a>
+                    </td>
+                    <td>
+                        <a
+                            href='/courses/{{this._id}}/delete'
+                            class='btn btn-danger'
+                            data-bs-toggle='modal'
+                            data-bs-target='#delete-course'
+                            data-bs-id="{{this._id}}"
+                        >
+                            Xóa
+                        </a>
+                    </td>
+                </tr>
             {{/each}}
         </tbody>
     </table>
 </div>
+
+{{! Modal Confirm Ask User }}
+<div
+    class='modal fade'
+    tabindex='-1'
+    id='delete-course'
+    aria-labelledby='delete-courseLabel'
+    aria-hidden='true'
+>
+    <div class='modal-dialog'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title'>Thông báo</h5>
+                <button
+                    type='button'
+                    class='btn-close'
+                    data-bs-dismiss='modal'
+                    aria-label='Close'
+                ></button>
+            </div>
+            <div class='modal-body'>
+                <p>Bạn chắc chắn muốn xóa khóa học này?</p>
+            </div>
+            <div class='modal-footer'>
+                <button
+                    type='button'
+                    class='btn btn-secondary'
+                    data-bs-dismiss='modal'
+                >
+                    Hủy
+                </button>
+                <button id="btn-delete-course" type='button' class='btn btn-danger'>Xoá bỏ</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{!-- DELETE HIDDEN FORM ACTION --}}
+{{!-- Tạo ra form trống để submit form --}}
+<form method='POST' name="delete-course-form"></form>
+
+<!-- jQuery cần được load đầu tiên -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Toastr cần jQuery nên đặt sau -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+{{!-- Script --}}
+<script>
+    var courseId;
+    var deleteCourse = document.getElementById('delete-course');
+    var deleteForm = document.forms['delete-course-form'];
+    var deleteBtn = document.getElementById('btn-delete-course')
+
+    // When dialog confirm clicked
+    if (deleteCourse) {
+        deleteCourse.addEventListener('show.bs.modal', event => {
+            // Button that triggered the modal
+            var button = event.relatedTarget
+            // Extract info from data-bs-id attributes
+            courseId = button.getAttribute('data-bs-id');
+        });
+    };
+
+    // When delete course btn clicked
+    deleteBtn.onclick = function () {
+        // Set action for delete form
+        deleteForm.action = '/courses/' + courseId + '?_method=DELETE';
+        // Submit form
+        deleteForm.submit();
+    };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const message = urlParams.get('message');
+
+    if (message === 'update-success') {
+        toastr.success('Cập nhật khóa học thành công!');
+    }
+
+    if (message === 'delete-success') {
+        toastr.success('Xóa khóa học thành công!');
+    }
+</script>
