@@ -6,35 +6,49 @@
     </head>
     <body>
         <div class="main-home">
-            <div class="container mt-5">
-                <div class="row">
-                    <div class="col l-12 m-12 c-12">
-                        <h1 class="main-home__title">Khóa học nổi bật</h1>
+            {{!-- Start My Courses --}}
+            <div class="section-myCourses">
+                <div class="container mt-5">
+                    <div class="row">
+                        <div class="col l-12 m-12 c-12">
+                            <h1 class="main-home__title">Khóa học của tôi</h1>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="course-wrapper" class="overflow-hidden mt-4">
+                    <div class='container'> 
+                        <div id="course-list" class='row transition-height'>
+                            {{#each courses}}
+                                <div class='col l-3 m-6 c-12 course-item'>
+                                    <div class='mt-4'>
+                                        <a href='/courses/{{this.slug}}' class='card-link'>
+                                            <div class='card card-hover' style='width: 18rem;'>
+                                                <img src={{this.image}} class='card-img-top' alt={{this.name}}/>
+                                                <div class='card-body'>
+                                                    <h6 class='card-title'>{{this.name}}</h6>
+                                                    {{!-- <p class='card-text'>{{this.description}}</p> --}}
+                                                    <p class='card-cost'>{{this.cost}}đ</p>
+                                                    {{!-- <p class='card-text'>Trình độ: {{this.level}}</p> --}}
+                                                    <a href='/courses/{{this.slug}}' class='btn btn-primary mt-4'>Học ngay</a>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            {{/each}}
+                        </div>
+        
+                        <div class="text-center mt-3">
+                            <button id="toggle-btn" class="btn btn-primary">Xem thêm</button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class='container'>
-                <div class='row'>
-                    {{#each courses}}
-                        <div class='col l-3 m-6 c-12'>
-                            <div class='mt-4'>
-                                <a href='/courses/{{this.slug}}' class='card-link'>
-                                    <div class='card card-hover' style='width: 18rem;'>
-                                        <img src={{this.image}} class='card-img-top' alt={{this.name}}/>
-                                        <div class='card-body'>
-                                            <h6 class='card-title'>{{this.name}}</h6>
-                                            {{!-- <p class='card-text'>{{this.description}}</p> --}}
-                                            <p class='card-cost'>{{this.cost}}đ</p>
-                                            {{!-- <p class='card-text'>Trình độ: {{this.level}}</p> --}}
-                                            <a href='/courses/{{this.slug}}' class='btn btn-primary mt-4'>Học ngay</a>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    {{/each}}
-                </div>
-            </div>
+            {{!-- End My Courses --}}
+
+            {{!-- Start My Blogs --}}
+            {{!-- End My Blogs --}}
         </div>
     </body>
 
@@ -51,5 +65,69 @@
         if (message === 'create-success') {
             toastr.success('Thêm khóa học thành công!');
         }
+
+        // Thêm sự kiện click cho nút "Xem thêm"
+        document.addEventListener('DOMContentLoaded', () => {
+            const courseItems = document.querySelectorAll('.course-item');
+            const toggleBtn = document.getElementById('toggle-btn');
+            const courseList = document.getElementById('course-list');
+            const MAX_SHOW = 8; // Số lượng item hiển thị ban đầu
+
+            let expanded = false;
+
+            function setVisibleItems() {
+                courseItems.forEach((item, index) => {
+                    if (!expanded && index >= MAX_SHOW) {
+                        item.classList.remove('visible');
+                    } else {
+                        item.classList.add('visible');
+                    }
+                });
+            }
+
+            function setMaxHeight() {
+                // Reset height to auto to get full height
+                courseList.style.maxHeight = 'none';
+                const fullHeight = courseList.scrollHeight;
+
+                if (expanded) {
+                    courseList.style.maxHeight = fullHeight + 'px';
+                } else {
+                    // Đếm chiều cao của 8 item đầu tiên (1 hàng = 4 item)
+                    const items = Array.from(courseItems).slice(0, MAX_SHOW);
+                    let height = 0;
+                    items.forEach(item => {
+                        height = Math.max(height, item.offsetTop + item.offsetHeight);
+                    });
+                    courseList.style.maxHeight = height + 'px';
+                }
+            }
+
+            function update() {
+                setVisibleItems();
+
+                // Delay 1 frame để browser update DOM, tránh nhảy chiều cao
+                requestAnimationFrame(() => {
+                    setMaxHeight();
+                });
+
+                toggleBtn.textContent = expanded ? 'Ẩn bớt' : 'Xem thêm';
+            }
+
+            // Initial render
+            update();
+
+            toggleBtn.addEventListener('click', () => {
+                expanded = !expanded;
+                update();
+            });
+
+            // Khi window resize thì update lại chiều cao
+            window.addEventListener('resize', () => {
+                setTimeout(() => {
+                    setMaxHeight();
+                }, 200);
+            });
+        });
     </script>
 </html>
