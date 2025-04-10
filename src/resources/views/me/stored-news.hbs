@@ -1,47 +1,43 @@
 <div class='store-courses m-4'>
     <div class="d-flex justify-content-between align-items-center">
-        <h2 class='title'>Lưu trữ khóa học của tôi</h2>
-        <div class="sort">
+        <h2 class='title'>Lưu trữ bài viết của tôi</h2>
+        {{!-- <div class="sort">
             <div class="dropdown">
                 <div style="margin-bottom: 20px;">
                     <label for="sortSelect"><strong>Sắp xếp theo:</strong></label>
                     <select id="sortSelect">
                         <option value="newest" {{#ifEquals query.sort "newest"}}selected{{/ifEquals}}>Thời gian: Mới nhất</option>
                         <option value="oldest" {{#ifEquals query.sort "oldest"}}selected{{/ifEquals}}>Thời gian: Cũ nhất</option>
-                        <option value="price-asc" {{#ifEquals query.sort "price-asc"}}selected{{/ifEquals}}>Giá: Thấp → Cao</option>
-                        <option value="price-desc" {{#ifEquals query.sort "price-desc"}}selected{{/ifEquals}}>Giá: Cao → Thấp</option>
                         <option value="name-asc" {{#ifEquals query.sort "name-asc"}}selected{{/ifEquals}}>Tên A → Z</option>
                         <option value="name-desc" {{#ifEquals query.sort "name-desc"}}selected{{/ifEquals}}>Tên Z → A</option>
-                        <option value="level-asc" {{#ifEquals query.sort "level-asc"}}selected{{/ifEquals}}>Trình độ: Dễ - Pro</option>
-                        <option value="level-desc" {{#ifEquals query.sort "level-desc"}}selected{{/ifEquals}}>Trình độ: Pro - Dễ</option>
                     </select>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 
     <table class='table mt-4'>
         <thead>
             <tr>
                 <th scope='col'>STT</th>
-                <th scope='col'>Tên khóa học</th>
-                <th scope='col'>Trình độ</th>
-                <th scope='col'>Giá (đ)</th>
+                <th scope='col'>Tên bài viết</th>
+                <th scope='col'>Chuyên mục</th>
+                <th scope='col'>Thẻ</th>
                 <th scope='col'>Thời gian tạo</th>
                 <th scope='col' colspan='3'></th>
             </tr>
         </thead>
         <tbody>
-            {{#each courses}}
+            {{#each news}}
                 <tr>
                     <th scope='row'>{{indexPagination @index ../currentPage ../limit}}</th>
-                    <td>{{this.name}}</td>
-                    <td>{{this.level}}</td>
-                    <td>{{this.cost}}</td>
+                    <td>{{this.title}}</td>
+                    <td>{{this.category}}</td>
+                    <td>{{this.tags}}</td>
                     <td>{{formatDate this.createdAt}}</td>
                     <td>
                         <a
-                            href='/courses/{{this.slug}}'
+                            href='/news/{{this.slug}}'
                             class='btn btn-primary'
                         >
                             Xem
@@ -49,7 +45,7 @@
                     </td>
                     <td>
                         <a
-                            href='/courses/{{this._id}}/edit'
+                            href='/news/{{this._id}}/edit'
                             class='btn btn-warning'
                         >
                             Sửa
@@ -57,10 +53,10 @@
                     </td>
                     <td>
                         <a
-                            href='/courses/{{this._id}}/delete'
+                            href='/news/{{this._id}}/delete'
                             class='btn btn-danger'
                             data-bs-toggle='modal'
-                            data-bs-target='#delete-course'
+                            data-bs-target='#delete-new'
                             data-bs-id="{{this._id}}"
                         >
                             Xóa
@@ -73,11 +69,11 @@
 </div>
 
 {{! Modal Confirm Ask User }}
-<div
+{{!-- <div
     class='modal fade'
     tabindex='-1'
-    id='delete-course'
-    aria-labelledby='delete-courseLabel'
+    id='delete-new'
+    aria-labelledby='delete-newLabel'
     aria-hidden='true'
 >
     <div class='modal-dialog'>
@@ -102,7 +98,7 @@
                 >
                     Hủy
                 </button>
-                <button id="btn-delete-course" type='button' class='btn btn-danger'>Xoá bỏ</button>
+                <button id="btn-delete-new" type='button' class='btn btn-danger'>Xoá bỏ</button>
             </div>
         </div>
     </div>
@@ -127,11 +123,11 @@
             </li>
         </ul>
     </nav>
-</div>
+</div> 
 
 {{!-- DELETE HIDDEN FORM ACTION --}}
 {{!-- Tạo ra form trống để submit form --}}
-<form method='POST' name="delete-course-form"></form>
+{{!-- <form method='POST' name="delete-new-form"></form> --}}
 
 <!-- jQuery cần được load đầu tiên -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -140,26 +136,26 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 {{!-- Script --}}
-<script>
-    var courseId;
-    var deleteCourse = document.getElementById('delete-course');
-    var deleteForm = document.forms['delete-course-form'];
-    var deleteBtn = document.getElementById('btn-delete-course')
+{{!-- <script>
+    var newId;
+    var deleteNew = document.getElementById('delete-new');
+    var deleteForm = document.forms['delete-new-form'];
+    var deleteBtn = document.getElementById('btn-delete-new')
 
     // When dialog confirm clicked
-    if (deleteCourse) {
-        deleteCourse.addEventListener('show.bs.modal', event => {
+    if (deleteNew) {
+        deleteNew.addEventListener('show.bs.modal', event => {
             // Button that triggered the modal
             var button = event.relatedTarget
             // Extract info from data-bs-id attributes
-            courseId = button.getAttribute('data-bs-id');
+            newId = button.getAttribute('data-bs-id');
         });
     };
 
-    // When delete course btn clicked
+    // When delete new btn clicked
     deleteBtn.onclick = function () {
         // Set action for delete form
-        deleteForm.action = '/courses/' + courseId + '?_method=DELETE';
+        deleteForm.action = '/news/' + newId + '?_method=DELETE';
         // Submit form
         deleteForm.submit();
     };
@@ -167,12 +163,12 @@
     const urlParams = new URLSearchParams(window.location.search);
     const message = urlParams.get('message');
 
-    if (message === 'update-course-success') {
-        toastr.success('Cập nhật khóa học thành công!');
+    if (message === 'update-new-success') {
+        toastr.success('Cập nhật bài viết thành công!');
     }
 
-    if (message === 'delete-course-success') {
-        toastr.success('Xóa khóa học thành công!');
+    if (message === 'delete-new-success') {
+        toastr.success('Xóa bài viết thành công!');
     }
 
     document.getElementById('sortSelect').addEventListener('change', function () {
@@ -188,4 +184,4 @@
         // Redirect đến trang đầu tiên với sort mới
         window.location.href = `?page=1&sort=${selectedSort}`;
     });
-</script>
+</script> --}}

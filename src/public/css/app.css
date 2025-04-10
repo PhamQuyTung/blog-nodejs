@@ -7,20 +7,38 @@
   flex-grow: unset !important;
 }
 
-.transition-height {
-  transition: max-height 0.6s ease-in-out;
+.card-img-top {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.card-summary {
+  height: 3.6em; /* khoảng 3 dòng */
+  line-height: 1.2em;
   overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  white-space: normal;
 }
 
 /* Ẩn tất cả trước */
-.course-item {
+.course-item,
+.news-item {
+  visibility: hidden;
   opacity: 0;
   transform: translateY(20px);
   pointer-events: none;
   transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
-.course-item.visible {
+/* Hiện những cái được JS đánh dấu */
+.course-item.visible,
+.news-item.visible {
+  visibility: visible;
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
@@ -29,6 +47,11 @@
 /* Hiện những cái được JS đánh dấu */
 .course-item.visible {
   display: block;
+}
+
+.transition-height {
+  transition: max-height 0.5s ease;
+  overflow: hidden;
 }
 
 .card {
@@ -73,6 +96,26 @@
 .card-cost {
   color: #F05123;
   font-weight: 600;
+}
+
+.badge {
+  color: #000;
+  font-size: 1.2rem;
+  background-color: #bbb;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.img-fluid {
+  width: 100%;
+  height: 445px;
+  border-radius: 10px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.cl-orange {
+  color: #F05123;
 }
 
 .bg-grey {

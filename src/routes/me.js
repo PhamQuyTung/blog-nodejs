@@ -9,5 +9,6 @@ const meController = require('../app/controllers/MeController');
 
 // Định nghĩa tuyến đường cho trang me
 router.get('/stored/courses', meController.storedCourses);
+router.get('/stored/news', meController.storedNews);
 
 module.exports = router;

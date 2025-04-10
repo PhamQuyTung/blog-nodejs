@@ -1,0 +1,41 @@
+<div class='mt-4'>
+    <div class='container'>
+        <div class='row'>
+            <div class='col-lg-9'>
+                <h2 class="mt-4">{{news.title}}</h2>
+                <div class="img-content mt-4">
+                    <img src='{{news.thumbnail}}' class='img-fluid' alt='{{news.title}}'/>
+                </div>
+                <div class='mt-4 d-flex align-items-center gap-2'>
+                    <div class='card-category'>
+                        <span class="cl-orange">{{news.category}}</span> 
+                    </div>
+                    <span class='card-date'>{{formatDate news.createdAt}}</span>
+                </div>
+                <p class="mt-3">
+                    {{news.content}}
+                </p>
+                <div class="tags mt-4">
+                    <h5>
+                        Tags: 
+                        {{#each news.tags}}
+                            <span class="badge badge-secondary">{{this}}</span>
+                        {{/each}}
+                    </h5>
+                </div>
+            </div>
+
+            <div class='col-lg-3 bg-grey'>
+                <ul class='mt-4'>
+                    <li>
+                        <span>Tìm kiếm</span>
+                        <input type='text' class='form-control' placeholder='Tìm kiếm...'/>
+                    </li>
+                    <li>Danh mục</li>
+                    <li>Bài viết gần đây</li>
+                    <li>Thẻ</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

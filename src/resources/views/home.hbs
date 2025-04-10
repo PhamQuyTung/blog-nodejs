@@ -39,15 +39,59 @@
                             {{/each}}
                         </div>
         
+                        <!-- Courses Toggle Button -->
                         <div class="text-center mt-3">
-                            <button id="toggle-btn" class="btn btn-primary">Xem thêm</button>
+                            <button class="btn btn-primary toggle-btn" data-target="#course-list" data-item=".course-item">Xem thêm</button>
                         </div>
+                        <!-- End Courses Toggle Button -->
                     </div>
                 </div>
             </div>
             {{!-- End My Courses --}}
 
             {{!-- Start My Blogs --}}
+            <div class="section-myNews">
+                <div class="container mt-5">
+                    <div class="row">
+                        <div class="col l-12 m-12 c-12">
+                            <h1 class="main-home__title">Bài viết của tôi</h1>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="news-wrapper" class="overflow-hidden mt-4">
+                    <div class='container'> 
+                        <div id="news-list" class='row transition-height'>
+                            {{#each news}}
+                                <div class='col l-3 m-6 c-12 news-item'>
+                                    <div class='mt-4'>
+                                        <a href='/news/{{this.slug}}' class='card-link'>
+                                            <div class='card card-hover' style='width: 18rem;'>
+                                                <img src={{this.thumbnail}} class='card-img-top' alt={{this.title}}/>
+                                                <div class='card-body'>
+                                                    <span class='card-category'>{{this.category}}</span>
+                                                    <h6 class='card-title'>{{this.title}}</h6>
+                                                    <p class='card-summary'>{{this.summary}}</p>
+                                                    <div class="card-states">
+                                                        {{!-- <span class="card-status">Trạng thái: {{this.status}}</span> --}}
+                                                        <span class="card-date">{{formatDate this.createdAt}}</span>
+                                                    </div>
+                                                    <a href='/news/{{this.slug}}' class='btn btn-primary mt-4'>Đọc thêm</a>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            {{/each}}
+                        </div>
+        
+                        <!-- News Toggle Button -->
+                        <div class="text-center mt-3">
+                            <button class="btn btn-primary toggle-btn" data-target="#news-list" data-item=".news-item">Xem thêm</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             {{!-- End My Blogs --}}
         </div>
     </body>
@@ -62,22 +106,28 @@
         const urlParams = new URLSearchParams(window.location.search);
         const message = urlParams.get('message');
 
-        if (message === 'create-success') {
+        if (message === 'create-course-success') {
             toastr.success('Thêm khóa học thành công!');
         }
 
-        // Thêm sự kiện click cho nút "Xem thêm"
-        document.addEventListener('DOMContentLoaded', () => {
-            const courseItems = document.querySelectorAll('.course-item');
-            const toggleBtn = document.getElementById('toggle-btn');
-            const courseList = document.getElementById('course-list');
-            const MAX_SHOW = 8; // Số lượng item hiển thị ban đầu
+        if (message === 'create-news-success') {
+            toastr.success('Thêm bài viết thành công!');
+        }
+
+
+        // Setup toggle section for courses and news
+        function setupToggleSection({ wrapperSelector, itemSelector, buttonSelector, maxShow = 8 }) {
+            const wrapper = document.querySelector(wrapperSelector);
+            const items = wrapper.querySelectorAll(itemSelector);
+            const toggleBtn = document.querySelector(buttonSelector);
+
+            if (!wrapper || !items.length || !toggleBtn) return;
 
             let expanded = false;
 
             function setVisibleItems() {
-                courseItems.forEach((item, index) => {
-                    if (!expanded && index >= MAX_SHOW) {
+                items.forEach((item, index) => {
+                    if (!expanded && index >= maxShow) {
                         item.classList.remove('visible');
                     } else {
                         item.classList.add('visible');
@@ -86,47 +136,52 @@
             }
 
             function setMaxHeight() {
-                // Reset height to auto to get full height
-                courseList.style.maxHeight = 'none';
-                const fullHeight = courseList.scrollHeight;
+                wrapper.style.maxHeight = 'none';
+                const fullHeight = wrapper.scrollHeight;
 
                 if (expanded) {
-                    courseList.style.maxHeight = fullHeight + 'px';
+                    wrapper.style.maxHeight = fullHeight + 'px';
                 } else {
-                    // Đếm chiều cao của 8 item đầu tiên (1 hàng = 4 item)
-                    const items = Array.from(courseItems).slice(0, MAX_SHOW);
+                    const visibleItems = Array.from(items).slice(0, maxShow);
                     let height = 0;
-                    items.forEach(item => {
-                        height = Math.max(height, item.offsetTop + item.offsetHeight);
+                    visibleItems.forEach(item => {
+                        const itemBottom = item.offsetTop + item.offsetHeight;
+                        height = Math.max(height, itemBottom);
                     });
-                    courseList.style.maxHeight = height + 'px';
+                    wrapper.style.maxHeight = height + 'px';
                 }
             }
 
-            function update() {
+            function updateView() {
                 setVisibleItems();
-
-                // Delay 1 frame để browser update DOM, tránh nhảy chiều cao
-                requestAnimationFrame(() => {
-                    setMaxHeight();
-                });
-
+                requestAnimationFrame(() => setMaxHeight());
                 toggleBtn.textContent = expanded ? 'Ẩn bớt' : 'Xem thêm';
             }
 
-            // Initial render
-            update();
-
             toggleBtn.addEventListener('click', () => {
                 expanded = !expanded;
-                update();
+                updateView();
             });
 
-            // Khi window resize thì update lại chiều cao
             window.addEventListener('resize', () => {
-                setTimeout(() => {
-                    setMaxHeight();
-                }, 200);
+                setTimeout(() => setMaxHeight(), 200);
+            });
+
+            updateView(); // initial
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Thiết lập cho nhiều khu vực có nút Xem thêm
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                const wrapperSelector = btn.getAttribute('data-target');
+                const itemSelector = btn.getAttribute('data-item');
+
+                setupToggleSection({
+                    wrapperSelector,
+                    itemSelector,
+                    buttonSelector: `[data-target="${wrapperSelector}"]`,
+                    maxShow: 8
+                });
             });
         });
     </script>

@@ -1,0 +1,67 @@
+<div class='mt-4'>
+    <div class='container'>
+        <h2>Trang đăng bài viết</h2>
+        <form class='mt-4' action='/news/store' method='POST'>
+            <div class='mb-3'>
+                <label for='title' class='form-label'>Tiêu đề</label>
+                <input
+                    type='text'
+                    class='form-control'
+                    name='title'
+                    id='title'
+                />
+            </div>
+
+            <div class='mb-3'>
+                <label for='summary' class='form-label'>Tóm tắt</label>
+                <textarea
+                    class='form-control'
+                    name='summary'
+                    id='summary'
+                ></textarea>
+            </div>
+
+            <div class='mb-3'>
+                <label for='content' class='form-label'>Nội dung</label>
+                <textarea
+                    class='form-control'
+                    name='content'
+                    id='content'
+                    rows='10'
+                ></textarea>
+            </div>
+
+            <div class='mb-3'>
+                <label for='thumbnail' class='form-label'>URL Ảnh đại diện</label>
+                <input
+                    type='text'
+                    class='form-control'
+                    name='thumbnail'
+                    id='thumbnail'
+                />
+            </div>
+
+            <div class='mb-3'>
+                <label for='category' class='form-label'>Chuyên mục</label>
+                <input
+                    type='text'
+                    class='form-control'
+                    name='category'
+                    id='category'
+                />
+            </div>
+
+            <div class='mb-3'>
+                <label for='tags' class='form-label'>Tags</label>
+                <input
+                    type='text'
+                    class='form-control'
+                    name='tags'
+                    id='tags'
+                    placeholder='AI, Công nghệ'
+                />
+            </div>
+            <button type='submit' class='btn btn-primary mt-4'>Tạo</button>
+        </form>
+    </div>
+</div>

@@ -1,12 +1,12 @@
 const Course = require('../models/Course');
+const New = require('../models/New'); // THÊM DÒNG NÀY
 
 class SiteController {
     // [GET] /
     index(req, res, next) {
-        Course.find({})
-            .lean()
-            .then((courses) => {
-                res.render('home', { courses });
+        Promise.all([Course.find({}).lean(), New.find({}).lean()])
+            .then(([courses, news]) => {
+                res.render('home', { courses, news }); // TRUYỀN CẢ HAI DỮ LIỆU
             })
             .catch(next);
     }

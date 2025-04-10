@@ -3,7 +3,7 @@ const newsRouter = require('./news'); // Import router từ file news.js
 const coursesRouter = require('./courses'); // Import router từ file courses.js
 const siteRouter = require('./site'); // Import router từ file site.js
 const meRouter = require('./me'); // Import router từ file me.js
-const port = 3003; // Default port
+const port = 3005; // Default port
 
 function route(app) {
     // Các dòng code xử lý tuyến đư��ng vào đây
