@@ -1,19 +1,19 @@
 <div class='store-courses m-4'>
     <div class="d-flex justify-content-between align-items-center">
         <h2 class='title'>Lưu trữ bài viết của tôi</h2>
-        {{!-- <div class="sort">
+        <div class="sort">
             <div class="dropdown">
                 <div style="margin-bottom: 20px;">
                     <label for="sortSelect"><strong>Sắp xếp theo:</strong></label>
                     <select id="sortSelect">
                         <option value="newest" {{#ifEquals query.sort "newest"}}selected{{/ifEquals}}>Thời gian: Mới nhất</option>
                         <option value="oldest" {{#ifEquals query.sort "oldest"}}selected{{/ifEquals}}>Thời gian: Cũ nhất</option>
-                        <option value="name-asc" {{#ifEquals query.sort "name-asc"}}selected{{/ifEquals}}>Tên A → Z</option>
-                        <option value="name-desc" {{#ifEquals query.sort "name-desc"}}selected{{/ifEquals}}>Tên Z → A</option>
+                        <option value="title-asc" {{#ifEquals query.sort "title-asc"}}selected{{/ifEquals}}>Tên A → Z</option>
+                        <option value="title-desc" {{#ifEquals query.sort "title-desc"}}selected{{/ifEquals}}>Tên Z → A</option>
                     </select>
                 </div>
             </div>
-        </div> --}}
+        </div>
     </div>
 
     <table class='table mt-4'>
@@ -69,7 +69,7 @@
 </div>
 
 {{! Modal Confirm Ask User }}
-{{!-- <div
+<div
     class='modal fade'
     tabindex='-1'
     id='delete-new'
@@ -88,7 +88,7 @@
                 ></button>
             </div>
             <div class='modal-body'>
-                <p>Bạn chắc chắn muốn xóa khóa học này?</p>
+                <p>Bạn chắc chắn muốn xóa bài viết này?</p>
             </div>
             <div class='modal-footer'>
                 <button
@@ -127,7 +127,7 @@
 
 {{!-- DELETE HIDDEN FORM ACTION --}}
 {{!-- Tạo ra form trống để submit form --}}
-{{!-- <form method='POST' name="delete-new-form"></form> --}}
+<form method='POST' name="delete-new-form"></form>
 
 <!-- jQuery cần được load đầu tiên -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -136,7 +136,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 {{!-- Script --}}
-{{!-- <script>
+<script>
     var newId;
     var deleteNew = document.getElementById('delete-new');
     var deleteForm = document.forms['delete-new-form'];
@@ -184,4 +184,5 @@
         // Redirect đến trang đầu tiên với sort mới
         window.location.href = `?page=1&sort=${selectedSort}`;
     });
-</script> --}}
+</script>
+

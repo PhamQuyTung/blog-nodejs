@@ -1,34 +1,24 @@
 <div class='store-courses m-4'>
     <div class="d-flex justify-content-between align-items-center">
         <div>
-            <h2 class='title'>Lưu trữ khóa học của tôi</h2>
-            <a href='/me/trash/courses' class='font-size-18 text-decoration-none'>
-                {{#if deletedCount}}
-                <i class="fa-solid fa-trash-can"></i>
-                Thùng rác
-                ({{deletedCount}})
-                {{/if}}
-            </a>
+            <a href='/me/stored/courses' class='btn btn-primary'>Danh sách khóa học</a>
+            <h2 class='title'>Khóa học đã xóa</h2>
         </div>
 
-        <div class="d-flex flex-column align-items-end">
-            <a href='/courses/create' class='btn btn-primary me-2'>Đăng khóa học</a>
-            {{!-- <a href='/me' class='btn btn-secondary'>Quay lại</a> --}}
-            <div class="sort mt-3">
-                <div class="dropdown">
-                    <div style="margin-bottom: 20px;">
-                        <label for="sortSelect"><strong>Sắp xếp theo:</strong></label>
-                        <select id="sortSelect">
-                            <option value="newest" {{#ifEquals query.sort "newest"}}selected{{/ifEquals}}>Thời gian: Mới nhất</option>
-                            <option value="oldest" {{#ifEquals query.sort "oldest"}}selected{{/ifEquals}}>Thời gian: Cũ nhất</option>
-                            <option value="price-asc" {{#ifEquals query.sort "price-asc"}}selected{{/ifEquals}}>Giá: Thấp → Cao</option>
-                            <option value="price-desc" {{#ifEquals query.sort "price-desc"}}selected{{/ifEquals}}>Giá: Cao → Thấp</option>
-                            <option value="name-asc" {{#ifEquals query.sort "name-asc"}}selected{{/ifEquals}}>Tên A → Z</option>
-                            <option value="name-desc" {{#ifEquals query.sort "name-desc"}}selected{{/ifEquals}}>Tên Z → A</option>
-                            <option value="level-asc" {{#ifEquals query.sort "level-asc"}}selected{{/ifEquals}}>Trình độ: Dễ - Pro</option>
-                            <option value="level-desc" {{#ifEquals query.sort "level-desc"}}selected{{/ifEquals}}>Trình độ: Pro - Dễ</option>
-                        </select>
-                    </div>
+        <div class="sort">
+            <div class="dropdown">
+                <div style="margin-bottom: 20px;">
+                    <label for="sortSelect"><strong>Sắp xếp theo:</strong></label>
+                    <select id="sortSelect">
+                        <option value="newest" {{#ifEquals query.sort "newest"}}selected{{/ifEquals}}>Thời gian: Mới nhất</option>
+                        <option value="oldest" {{#ifEquals query.sort "oldest"}}selected{{/ifEquals}}>Thời gian: Cũ nhất</option>
+                        <option value="price-asc" {{#ifEquals query.sort "price-asc"}}selected{{/ifEquals}}>Giá: Thấp → Cao</option>
+                        <option value="price-desc" {{#ifEquals query.sort "price-desc"}}selected{{/ifEquals}}>Giá: Cao → Thấp</option>
+                        <option value="name-asc" {{#ifEquals query.sort "name-asc"}}selected{{/ifEquals}}>Tên A → Z</option>
+                        <option value="name-desc" {{#ifEquals query.sort "name-desc"}}selected{{/ifEquals}}>Tên Z → A</option>
+                        <option value="level-asc" {{#ifEquals query.sort "level-asc"}}selected{{/ifEquals}}>Trình độ: Dễ - Pro</option>
+                        <option value="level-desc" {{#ifEquals query.sort "level-desc"}}selected{{/ifEquals}}>Trình độ: Pro - Dễ</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -54,39 +44,30 @@
                     <td>{{this.cost}}</td>
                     <td>{{formatDate this.createdAt}}</td>
                     <td>
-                        <a
-                            href='/courses/{{this.slug}}'
-                            class='btn btn-primary'
+                        <span
+                            class='btn btn-primary btn-restore'
+                            data-bs-id="{{this._id}}"
                         >
-                            Xem
-                        </a>
+                            Khôi phục
+                        </span>
                     </td>
                     <td>
-                        <a
-                            href='/courses/{{this._id}}/edit'
-                            class='btn btn-warning'
-                        >
-                            Sửa
-                        </a>
-                    </td>
-                    <td>
-                        <a
-                            href='/courses/{{this._id}}/delete'
+                        <span
                             class='btn btn-danger'
                             data-bs-toggle='modal'
                             data-bs-target='#delete-course'
                             data-bs-id="{{this._id}}"
                         >
-                            Xóa
-                        </a>
+                            Xóa vĩnh viễn
+                        </span>
                     </td>
                 </tr>
 
                 {{else}}
                 <tr>
                     <td colspan='7' class='text-center'>
-                        Bạn chưa đăng khóa học nào
-                        <a href="/courses/create">Đăng khóa học</a>
+                        Thùng rác trống.
+                        <a href="/me/stored/courses">Danh sách khóa học</a>
                     </td>
                 </tr>
             {{/each}}
@@ -105,7 +86,7 @@
     <div class='modal-dialog'>
         <div class='modal-content'>
             <div class='modal-header'>
-                <h5 class='modal-title'>Thông báo</h5>
+                <h5 class='modal-title'>Cảnh báo</h5>
                 <button
                     type='button'
                     class='btn-close'
@@ -114,7 +95,7 @@
                 ></button>
             </div>
             <div class='modal-body'>
-                <p>Bạn chắc chắn muốn xóa khóa học này?</p>
+                <p>Hành động này không thể khôi phục. Bạn vẫn muốn xóa khóa học này?</p>
             </div>
             <div class='modal-footer'>
                 <button
@@ -122,9 +103,9 @@
                     class='btn btn-secondary'
                     data-bs-dismiss='modal'
                 >
-                    Hủy
+                    Suy nghĩ lại
                 </button>
-                <button id="btn-delete-course" type='button' class='btn btn-danger'>Xoá bỏ</button>
+                <button id="btn-delete-course" type='button' class='btn btn-danger'>Xoá vĩnh viễn</button>
             </div>
         </div>
     </div>
@@ -151,9 +132,9 @@
     </nav>
 </div>
 
-{{!-- DELETE HIDDEN FORM ACTION --}}
 {{!-- Tạo ra form trống để submit form --}}
 <form method='POST' name="delete-course-form"></form>
+<form method='POST' name="restore-course-form"></form>
 
 <!-- jQuery cần được load đầu tiên -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -166,7 +147,9 @@
     var courseId;
     var deleteCourse = document.getElementById('delete-course');
     var deleteForm = document.forms['delete-course-form'];
-    var deleteBtn = document.getElementById('btn-delete-course')
+    var restoreForm = document.forms['restore-course-form'];
+    var deleteBtn = document.getElementById('btn-delete-course');
+    var btnRestore = $('.btn-restore');
 
     // When dialog confirm clicked
     if (deleteCourse) {
@@ -181,16 +164,30 @@
     // When delete course btn clicked
     deleteBtn.onclick = function () {
         // Set action for delete form
-        deleteForm.action = '/courses/' + courseId + '?_method=DELETE';
+        deleteForm.action = '/courses/' + courseId + '/force?_method=DELETE';
         // Submit form
         deleteForm.submit();
     };
+
+    // When restore course btn clicked
+    btnRestore.click(function () {
+        // Get courseId from data-bs-id attribute
+        var courseId = $(this).data('bs-id');
+        // Set action for restore form
+        restoreForm.action = '/courses/' + courseId + '/restore?_method=PATCH';
+        // Submit form
+        restoreForm.submit();
+    });
 
     const urlParams = new URLSearchParams(window.location.search);
     const message = urlParams.get('message');
 
     if (message === 'update-course-success') {
         toastr.success('Cập nhật khóa học thành công!');
+    }
+
+    if (message === 'restore-course-success') {
+        toastr.success('Khôi phục khóa học thành công!');
     }
 
     if (message === 'delete-course-success') {

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+// Tạo slug từ trường title
 const slug = require('mongoose-slug-generator');
 mongoose.plugin(slug);
 

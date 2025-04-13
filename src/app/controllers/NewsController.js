@@ -52,6 +52,43 @@ class NewsController {
                 next(error);
             });
     }
+
+    // [GET] /news/:id/edit
+    edit(req, res, next) {
+        NewModel.findById(req.params.id)
+            .lean()
+            .then((news) => {
+                if (!news) {
+                    return res.status(404).send('New not found');
+                }
+                res.render('news/edit', { news });
+            })
+            .catch(next);
+    }
+
+    // [PUT] /news/:id
+    update(req, res, next) {
+        const formData = req.body;
+
+        // Tách chuỗi tags thành mảng (nếu có nhập)
+        if (formData.tags) {
+            formData.tags = formData.tags
+                .split(',')
+                .map((tag) => tag.trim())
+                .filter((tag) => tag.length > 0); // bỏ tag rỗng nếu có
+        }
+
+        NewModel.updateOne({ _id: req.params.id }, formData)
+            .then(() => res.redirect('/me/stored/news/?message=update-new-success'))
+            .catch(next);
+    }
+
+    // [DELETE] /news/:id
+    destroy(req, res, next) {
+        NewModel.deleteOne({ _id: req.params.id })
+            .then(() => res.redirect('/me/stored/news?message=delete-new-success'))
+            .catch(next);
+    }
 }
 
 module.exports = new NewsController();

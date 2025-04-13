@@ -36,8 +36,4 @@ module.exports = {
     indexPagination: function (index, currentPage, limit) {
         return (currentPage - 1) * limit + index + 1;
     },
-    
-    ifEquals: (a, b, options) => {
-        return a === b ? options.fn(this) : options.inverse(this);
-    },
 };

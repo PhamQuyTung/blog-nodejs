@@ -12,21 +12,13 @@ class MeController {
         const page = parseInt(req.query.page) || 1;
         const sortQuery = req.query.sort;
 
-        const mapLevelToIndex = {
-            'Dễ': 1,
-            'Trung Bình': 2,
-            'Khó': 3,
-            'Pro': 4,
-        };
-
-        Course.find({})
-            .lean()
-            .then((allCourses) => {
+        Promise.all([Course.countDocumentsDeleted(), Course.find({}).lean()])
+            .then(([deletedCount, allCourses]) => {
                 // Sắp xếp theo query
                 if (sortQuery === 'level-asc') {
-                    allCourses.sort((a, b) => mapLevelToIndex[a.level] - mapLevelToIndex[b.level]);
+                    allCourses.sort((a, b) => a.level - b.level);
                 } else if (sortQuery === 'level-desc') {
-                    allCourses.sort((a, b) => mapLevelToIndex[b.level] - mapLevelToIndex[a.level]);
+                    allCourses.sort((a, b) => b.level - a.level);
                 } else if (sortQuery === 'price-asc') {
                     allCourses.sort((a, b) => a.cost - b.cost);
                 } else if (sortQuery === 'price-desc') {
@@ -54,6 +46,55 @@ class MeController {
                     currentPage: page,
                     totalPages,
                     limit,
+                    deletedCount,
+                    query: { sort: sortQuery },
+                });
+            })
+            .catch(next);
+    }
+
+    // [GET] /me/trash/courses
+    // Phương thức này được sử dụng để lấy danh sách các khóa học đã xóa trong cơ sở dữ liệu và hiển thị chúng ra trang web
+    trashCourses(req, res, next) {
+        const limit = 5;
+        const page = parseInt(req.query.page) || 1;
+        const sortQuery = req.query.sort;
+
+        Course.findDeleted({})
+            .lean()
+            .then((allCourses) => {
+                // Sắp xếp theo query
+                if (sortQuery === 'level-asc') {
+                    allCourses.sort((a, b) => a.level - b.level);
+                } else if (sortQuery === 'level-desc') {
+                    allCourses.sort((a, b) => b.level - a.level);
+                } else if (sortQuery === 'price-asc') {
+                    allCourses.sort((a, b) => a.cost - b.cost);
+                } else if (sortQuery === 'price-desc') {
+                    allCourses.sort((a, b) => b.cost - a.cost);
+                } else if (sortQuery === 'name-asc') {
+                    allCourses.sort((a, b) => a.name.localeCompare(b.name));
+                } else if (sortQuery === 'name-desc') {
+                    allCourses.sort((a, b) => b.name.localeCompare(a.name));
+                } else if (sortQuery === 'oldest') {
+                    allCourses.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+                } else {
+                    allCourses.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // newest
+                }
+
+                const totalCourses = allCourses.length;
+                const totalPages = Math.ceil(totalCourses / limit);
+
+                const paginatedCourses = allCourses.slice(
+                    (page - 1) * limit,
+                    page * limit
+                );
+
+                res.render('me/trash-courses', {
+                    courses: paginatedCourses,
+                    currentPage: page,
+                    totalPages,
+                    limit,
                     query: { sort: sortQuery },
                 });
             })
@@ -71,15 +112,15 @@ class MeController {
             .lean() // Chuyển đổi dữ liệu thành Plain Object để Handlebars có thể xử lý
             .then((allNews) => {
                 // Sắp xếp theo query
-                // if (sortQuery === 'title-asc') {
-                //     allNews.sort((a, b) => a.title.localeCompare(b.title));
-                // } else if (sortQuery === 'title-desc') {
-                //     allNews.sort((a, b) => b.title.localeCompare(a.title));
-                // } else if (sortQuery === 'oldest') {
-                //     allNews.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-                // } else {
-                //     allNews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // blog newest
-                // }
+                if (sortQuery === 'title-asc') {
+                    allNews.sort((a, b) => a.title.localeCompare(b.title));
+                } else if (sortQuery === 'title-desc') {
+                    allNews.sort((a, b) => b.title.localeCompare(a.title));
+                } else if (sortQuery === 'oldest') {
+                    allNews.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+                } else {
+                    allNews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // blog newest
+                }
 
                 const totalNews = allNews.length;
                 const totalPages = Math.ceil(totalNews / limit);
