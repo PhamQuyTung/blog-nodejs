@@ -11,5 +11,6 @@ const meController = require('../app/controllers/MeController');
 router.get('/stored/courses', meController.storedCourses);
 router.get('/trash/courses', meController.trashCourses);
 router.get('/stored/news', meController.storedNews);
+router.get('/trash/news', meController.trashNews);
 
 module.exports = router;

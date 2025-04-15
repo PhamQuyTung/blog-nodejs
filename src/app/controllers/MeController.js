@@ -140,6 +140,46 @@ class MeController {
             })
             .catch(next);
     }
+
+    // [GET] /me/trash/news
+    // Phương thức này được sử dụng để lấy danh sách các tin tức đã xóa trong cơ sở dữ liệu và hiển thị chúng ra trang web
+    trashNews(req, res, next) {
+        const limit = 5;
+        const page = parseInt(req.query.page) || 1;
+        const sortQuery = req.query.sort;
+
+        New.findDeleted({})
+            .lean()
+            .then((allNews) => {
+                // Sắp xếp theo query
+                if (sortQuery === 'title-asc') {
+                    allNews.sort((a, b) => a.title.localeCompare(b.title));
+                } else if (sortQuery === 'title-desc') {
+                    allNews.sort((a, b) => b.title.localeCompare(a.title));
+                } else if (sortQuery === 'oldest') {
+                    allNews.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+                } else {
+                    allNews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // blog newest
+                }
+
+                const totalNews = allNews.length;
+                const totalPages = Math.ceil(totalNews / limit);
+        
+                const paginatedNews = allNews.slice(
+                    (page - 1) * limit,
+                    page * limit
+                );
+
+                res.render('me/trash-news', {
+                    news: paginatedNews,
+                    currentPage: page,
+                    totalPages,
+                    limit,
+                    query: { sort: sortQuery },
+                });
+            })
+            .catch(next);
+    }
 }
 
 module.exports = new MeController();

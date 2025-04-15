@@ -1,10 +1,9 @@
 <div class='container mt-4'>
     <div class="d-flex justify-content-between align-items-center">
         <div>
-            <a href='/me/stored/courses' class='btn btn-primary'>Danh sách khóa học</a>
-            <h2 class='title'>Khóa học đã xóa</h2>
+            <a href='/me/stored/news' class='btn btn-primary'>Danh sách bài viết</a>
+            <h2 class='title'>Bài viết đã xóa</h2>
         </div>
-
         <div class="sort">
             <div class="dropdown">
                 <div style="margin-bottom: 20px;">
@@ -12,12 +11,8 @@
                     <select id="sortSelect">
                         <option value="newest" {{#ifEquals query.sort "newest"}}selected{{/ifEquals}}>Thời gian: Mới nhất</option>
                         <option value="oldest" {{#ifEquals query.sort "oldest"}}selected{{/ifEquals}}>Thời gian: Cũ nhất</option>
-                        <option value="price-asc" {{#ifEquals query.sort "price-asc"}}selected{{/ifEquals}}>Giá: Thấp → Cao</option>
-                        <option value="price-desc" {{#ifEquals query.sort "price-desc"}}selected{{/ifEquals}}>Giá: Cao → Thấp</option>
-                        <option value="name-asc" {{#ifEquals query.sort "name-asc"}}selected{{/ifEquals}}>Tên A → Z</option>
-                        <option value="name-desc" {{#ifEquals query.sort "name-desc"}}selected{{/ifEquals}}>Tên Z → A</option>
-                        <option value="level-asc" {{#ifEquals query.sort "level-asc"}}selected{{/ifEquals}}>Trình độ: Dễ - Pro</option>
-                        <option value="level-desc" {{#ifEquals query.sort "level-desc"}}selected{{/ifEquals}}>Trình độ: Pro - Dễ</option>
+                        <option value="title-asc" {{#ifEquals query.sort "title-asc"}}selected{{/ifEquals}}>Tên A → Z</option>
+                        <option value="title-desc" {{#ifEquals query.sort "title-desc"}}selected{{/ifEquals}}>Tên Z → A</option>
                     </select>
                 </div>
             </div>
@@ -28,20 +23,20 @@
         <thead>
             <tr>
                 <th scope='col'>STT</th>
-                <th scope='col'>Tên khóa học</th>
-                <th scope='col'>Trình độ</th>
-                <th scope='col'>Giá (đ)</th>
+                <th scope='col'>Tên bài viết</th>
+                <th scope='col'>Chuyên mục</th>
+                <th scope='col'>Thẻ</th>
                 <th scope='col'>Thời gian tạo</th>
                 <th scope='col' colspan='3'></th>
             </tr>
         </thead>
         <tbody>
-            {{#each courses}}
+            {{#each news}}
                 <tr>
                     <th scope='row'>{{indexPagination @index ../currentPage ../limit}}</th>
-                    <td>{{this.name}}</td>
-                    <td>{{this.level}}</td>
-                    <td>{{this.cost}}</td>
+                    <td>{{this.title}}</td>
+                    <td>{{this.category}}</td>
+                    <td>{{this.tags}}</td>
                     <td>{{formatDate this.createdAt}}</td>
                     <td>
                         <span
@@ -55,21 +50,21 @@
                         <span
                             class='btn btn-danger'
                             data-bs-toggle='modal'
-                            data-bs-target='#delete-course'
+                            data-bs-target='#delete-new'
                             data-bs-id="{{this._id}}"
                         >
                             Xóa vĩnh viễn
                         </span>
                     </td>
                 </tr>
-
+                {{!-- Check if the current item is the last in the array --}}
                 {{else}}
-                <tr>
-                    <td colspan='7' class='text-center'>
-                        Thùng rác trống.
-                        <a href="/me/stored/courses">Danh sách khóa học</a>
-                    </td>
-                </tr>
+                    <tr>
+                        <td colspan="7" class="text-center">
+                            Thùng rác trống
+                            <a href="/me/stored/news">Danh sách bài viết</a>
+                        </td>
+                    </tr>
             {{/each}}
         </tbody>
     </table>
@@ -79,14 +74,14 @@
 <div
     class='modal fade'
     tabindex='-1'
-    id='delete-course'
-    aria-labelledby='delete-courseLabel'
+    id='delete-new'
+    aria-labelledby='delete-newLabel'
     aria-hidden='true'
 >
     <div class='modal-dialog'>
         <div class='modal-content'>
             <div class='modal-header'>
-                <h5 class='modal-title'>Cảnh báo</h5>
+                <h5 class='modal-title'>Thông báo</h5>
                 <button
                     type='button'
                     class='btn-close'
@@ -95,7 +90,7 @@
                 ></button>
             </div>
             <div class='modal-body'>
-                <p>Hành động này không thể khôi phục. Bạn vẫn muốn xóa khóa học này?</p>
+                <p>Hành động này không thể hồi phục. Bạn chắc chắn muốn xóa vĩnh viễn bài viết này?</p>
             </div>
             <div class='modal-footer'>
                 <button
@@ -105,7 +100,7 @@
                 >
                     Suy nghĩ lại
                 </button>
-                <button id="btn-delete-course" type='button' class='btn btn-danger'>Xoá vĩnh viễn</button>
+                <button id="btn-delete-new" type='button' class='btn btn-danger'>Xoá vĩnh viễn</button>
             </div>
         </div>
     </div>
@@ -130,11 +125,12 @@
             </li>
         </ul>
     </nav>
-</div>
+</div> 
 
 {{!-- Tạo ra form trống để submit form --}}
-<form method='POST' name="delete-course-form"></form>
-<form method='POST' name="restore-course-form"></form>
+<form method='POST' name="delete-new-form"></form>
+<form method='POST' name="restore-new-form"></form>
+
 
 <!-- jQuery cần được load đầu tiên -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -144,27 +140,28 @@
 
 {{!-- Script --}}
 <script>
-    var courseId;
-    var deleteCourse = document.getElementById('delete-course');
-    var deleteForm = document.forms['delete-course-form'];
-    var deleteBtn = document.getElementById('btn-delete-course');
-    var restoreForm = document.forms['restore-course-form'];
+    var newId;
+    var deleteNew = document.getElementById('delete-new');
+    var deleteForm = document.forms['delete-new-form'];
+    var deleteBtn = document.getElementById('btn-delete-new');
     var btnRestore = $('.btn-restore');
+    var restoreForm = document.forms['restore-new-form'];
+
 
     // When dialog confirm clicked
-    if (deleteCourse) {
-        deleteCourse.addEventListener('show.bs.modal', event => {
+    if (deleteNew) {
+        deleteNew.addEventListener('show.bs.modal', event => {
             // Button that triggered the modal
             var button = event.relatedTarget
             // Extract info from data-bs-id attributes
-            courseId = button.getAttribute('data-bs-id');
+            newId = button.getAttribute('data-bs-id');
         });
     };
 
-    // When delete course btn clicked
+    // When delete new btn clicked
     deleteBtn.onclick = function () {
         // Set action for delete form
-        deleteForm.action = '/courses/' + courseId + '/force?_method=DELETE';
+        deleteForm.action = '/news/' + newId + '/force?_method=DELETE';
         // Submit form
         deleteForm.submit();
     };
@@ -172,9 +169,9 @@
     // When restore course btn clicked
     btnRestore.click(function () {
         // Get courseId from data-bs-id attribute
-        var courseId = $(this).data('bs-id');
+        var newId = $(this).data('bs-id');
         // Set action for restore form
-        restoreForm.action = '/courses/' + courseId + '/restore?_method=PATCH';
+        restoreForm.action = '/news/' + newId + '/restore?_method=PATCH';
         // Submit form
         restoreForm.submit();
     });
@@ -182,16 +179,16 @@
     const urlParams = new URLSearchParams(window.location.search);
     const message = urlParams.get('message');
 
-    if (message === 'update-course-success') {
-        toastr.success('Cập nhật khóa học thành công!');
+    if (message === 'update-new-success') {
+        toastr.success('Cập nhật bài viết thành công!');
     }
 
-    if (message === 'restore-course-success') {
-        toastr.success('Khôi phục khóa học thành công!');
+    if (message === 'delete-new-success') {
+        toastr.success('Xóa bài viết thành công!');
     }
 
-    if (message === 'delete-course-success') {
-        toastr.success('Xóa khóa học thành công!');
+    if (message === 'restore-new-success') {
+        toastr.success('Khôi phục bài viết thành công!');
     }
 
     document.getElementById('sortSelect').addEventListener('change', function () {
@@ -208,3 +205,4 @@
         window.location.href = `?page=1&sort=${selectedSort}`;
     });
 </script>
+

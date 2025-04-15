@@ -1,6 +1,12 @@
-<div class='store-courses m-4'>
+<div class='container mt-4'>
     <div class="d-flex justify-content-between align-items-center">
-        <h2 class='title'>Lưu trữ bài viết của tôi</h2>
+        <div>
+            <h2 class='title'>Lưu trữ bài viết của tôi</h2>
+            <a href='/me/trash/news' class='font-size-18 text-decoration-none'>
+                <i class="fa-solid fa-trash-can"></i>
+                Thùng rác
+            </a>
+        </div>
         <div class="sort">
             <div class="dropdown">
                 <div style="margin-bottom: 20px;">
@@ -63,6 +69,14 @@
                         </a>
                     </td>
                 </tr>
+                {{!-- Check if the current item is the last in the array --}}
+                {{else}}
+                    <tr>
+                        <td colspan="7" class="text-center">
+                            Không có bài viết nào
+                            <a href="/news/create">Đăng bài viết</a>
+                        </td>
+                    </tr>
             {{/each}}
         </tbody>
     </table>

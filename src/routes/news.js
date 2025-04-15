@@ -28,4 +28,13 @@ router.get('/', newsController.index);
 // Định nghĩa tuyến đường cho trang xóa tin tức
 router.delete('/:id', newsController.destroy);
 
+// Định nghĩa tuyến đường cho trang thùng rác tin tức
+router.get('/trash', newsController.trash);
+
+// Định nghĩa tuyến đường cho trang khôi phục tin tức
+router.patch('/:id/restore', newsController.restore);
+
+// Định nghĩa tuyến đường cho trang xóa vĩnh viễn tin tức
+router.delete('/:id/force', newsController.forceDelete);
+
 module.exports = router;

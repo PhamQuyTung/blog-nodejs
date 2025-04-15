@@ -173,6 +173,38 @@
     justify-content: end;
 }
 
+// SEARCH
+.search-container {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-container h3 {
+    margin-bottom: 20px;
+    color: #343a40;
+}
+
+.search-container ul {
+    list-style: none;
+    padding: 0;
+}
+
+.search-container ul li {
+    margin-bottom: 10px;
+}
+
+.search-container ul li a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+.search-container ul li a:hover {
+    text-decoration: underline;
+}   
+
 // FOOTER
 .footer {
     background: #222;

@@ -1,24 +1,116 @@
 <div class="mt-4">
-  <form method="POST" action="">
-    <div class="form-floating mb-3">
-      <input
-        type="text"
-        class="form-control"
-        id="search-input"
-        placeholder="Nhập từ khóa"
-        name="q"
-      />
-      <label for="search-input">Từ khóa</label>
+  <div class="container">
+    <form method="GET" action="/search">
+      <div class="form-floating mb-3 position-relative">
+        <input
+          type="text"
+          class="form-control"
+          id="search-input"
+          placeholder="Nhập từ khóa"
+          name="q"
+          autocomplete="off"
+        />
+        <label for="search-input">Từ khóa</label>
+        <ul id="suggestions" class="list-group position-absolute" style="z-index: 1000; display: none;"></ul>
+      </div>
+
+      <div class="form-floating mb-3">
+        <select class="form-select" name="category">
+          <option value="">Tất cả danh mục</option>
+          <option value="programming">Lập trình</option>
+          <option value="design">Thiết kế</option>
+        </select>
+        <label for="category">Danh mục</label>
+      </div>
+
+      <div class="form-floating mb-3">
+        <select class="form-select" id="sort-select" name="sort">
+          <option value="newest">Mới nhất</option>
+          <option value="popular">Phổ biến nhất</option>
+          <option value="rating">Đánh giá cao nhất</option>
+        </select>
+        <label for="sort-select">Sắp xếp</label>
+      </div>
+
+      {{!-- Hiển thị kết quả tìm kiếm --}}
+      {{#if query}}
+          <h3>Kết quả tìm kiếm ({{courses.length}} khóa học, {{news.length}} bài viết)</h3>
+          {{#if courses.length}}
+              <h4>Khóa học:</h4>
+              <ul>
+                  {{#each courses}}
+                      <li><a href="/courses/{{this.slug}}">{{this.name}}</a></li>
+                  {{/each}}
+              </ul>
+          {{else}}
+              <p>Không tìm thấy khóa học phù hợp.</p>
+          {{/if}}
+
+          {{#if news.length}}
+              <h4>Bài viết:</h4>
+              <ul>
+                  {{#each news}}
+                      <li><a href="/news/{{this.slug}}">{{this.title}}</a></li>
+                  {{/each}}
+              </ul>
+          {{else}}
+              <p>Không tìm thấy bài viết phù hợp.</p>
+          {{/if}}
+      {{else}}
+          <p>Hãy nhập từ khóa để tìm kiếm.</p>
+      {{/if}}
+
+      <button type="submit" class="btn btn-primary mt-4" id="search-button">Tìm kiếm</button>
+    </form>
+
+    {{!-- Hiển thị phân trang --}}
+    <div class="pagination">
+    {{#if (gt currentPage 1)}}
+        <a href="?q={{query}}&page={{subtract currentPage 1}}">Trang trước</a>
+    {{/if}}
+
+    {{#if (lt currentPage totalPages)}}
+        <a href="?q={{query}}&page={{add currentPage 1}}">Trang sau</a>
+    {{/if}}
+</div>
+
+    <div id="loading-spinner" style="display: none;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
     </div>
 
-    <div class="form-floating mb-3">
-      <select class="form-control" id="gender-input" name="gender">
-        <option value="">=== Chọn giới tính ===</option>
-        <option value="male">=== Nam ===</option>
-        <option value="female">=== Nữ ===</option>
-      </select>
-    </div>
+    <script>
+        document.getElementById('search-button').addEventListener('click', function () {
+            document.getElementById('loading-spinner').style.display = 'block';
+        });
 
-    <button type="submit" class="btn btn-primary mt-4">Tìm kiếm</button>
-  </form>
+        const searchInput = document.getElementById('search-input');
+        const suggestions = document.getElementById('suggestions');
+
+        searchInput.addEventListener('input', function () {
+            const query = searchInput.value;
+            if (query.length > 2) {
+                fetch(`/api/suggestions?q=${encodeURIComponent(query)}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        suggestions.innerHTML = '';
+                        data.forEach((item) => {
+                            const li = document.createElement('li');
+                            li.className = 'list-group-item';
+                            li.textContent = item.name || item.title;
+                            li.addEventListener('click', () => {
+                                searchInput.value = item.name || item.title;
+                                suggestions.style.display = 'none';
+                            });
+                            suggestions.appendChild(li);
+                        });
+                        suggestions.style.display = 'block';
+                    });
+            } else {
+                suggestions.style.display = 'none';
+            }
+        });
+    </script>
+  </div>
 </div>

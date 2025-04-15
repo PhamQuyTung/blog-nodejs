@@ -59,4 +59,12 @@ const News = new Schema(
     }
 );
 
+// Add plugin
+var mongooseDelete = require('mongoose-delete');
+News.plugin(mongooseDelete, {
+    overrideMethods: 'all',
+    deletedAt: true,
+    // validateBeforeDelete: false,
+});
+
 module.exports = mongoose.model('News', News);

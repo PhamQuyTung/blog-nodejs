@@ -36,4 +36,7 @@ module.exports = {
     indexPagination: function (index, currentPage, limit) {
         return (currentPage - 1) * limit + index + 1;
     },
+
+    add: (a, b) => a + b,
+    subtract: (a, b) => a - b,
 };

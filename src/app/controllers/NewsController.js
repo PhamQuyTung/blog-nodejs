@@ -85,8 +85,42 @@ class NewsController {
 
     // [DELETE] /news/:id
     destroy(req, res, next) {
-        NewModel.deleteOne({ _id: req.params.id })
+        NewModel.delete({ _id: req.params.id })
             .then(() => res.redirect('/me/stored/news?message=delete-new-success'))
+            .catch(next);
+    }
+
+    // [GET] /news/trash
+    trash(req, res, next) {
+        NewModel.findDeleted()
+            .lean()
+            .then((news) => {
+                res.render('/me/trash/news', { news });
+            })
+            .catch(next);
+    }
+
+    // [PATCH] /news/:id/restore
+    // Khôi phục bài viết đã xóa
+    // Sử dụng phương thức restore của mongoose-delete
+    // Để khôi phục bài viết đã xóa
+    // Cập nhật trường deleted thành false
+    restore(req, res, next) {
+        NewModel.restore({ _id: req.params.id })
+            .then(() => {
+                return NewModel.updateOne(
+                    { _id: req.params.id },
+                    { deleted: false },
+                );
+            })
+            .then(() => res.redirect('/me/trash/news?message=restore-new-success'))
+            .catch(next);
+    }
+
+    // [DELETE] /news/:id/force
+    forceDelete(req, res, next) {
+        NewModel.deleteOne({ _id: req.params.id })
+            .then(() => res.redirect('/me/trash/news?message=delete-new-success'))
             .catch(next);
     }
 }
