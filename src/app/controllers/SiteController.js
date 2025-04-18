@@ -6,7 +6,8 @@ class SiteController {
     index(req, res, next) {
         Promise.all([Course.find({}).lean(), New.find({}).lean()])
             .then(([courses, news]) => {
-                res.render('home', { courses, news }); // TRUYỀN CẢ HAI DỮ LIỆU
+                console.log('Người dùng được truyền vào view:', req.user);
+                res.render('home', { courses, news, user: req.user }); // TRUYỀN CẢ 3 DỮ LIỆU
             })
             .catch(next);
     }
