@@ -115,6 +115,31 @@ class CourseController {
             .then(() => res.redirect('/me/trash/courses?message=restore-course-success'))
             .catch(next);
     }
+
+    // [POST] /courses/handle-form-actions
+    // Xử lý các hành động trên nhiều khóa học
+    handleFormActions(req, res, next) {
+        const action = req.body.action;
+        switch (action) {
+            case 'delete':
+                Course.delete({ _id: { $in: req.body.courseIds } })
+                    .then(() => res.redirect('/me/stored/courses?message=delete-course-success'))
+                    .catch(next);
+                break;
+            case 'restore':
+                Course.restore({ _id: { $in: req.body.courseIds } })
+                    .then(() => res.redirect('/me/trash/courses?message=restore-course-success'))
+                    .catch(next);
+                break;
+            case 'force':
+                Course.deleteMany({ _id: { $in: req.body.courseIds } })
+                    .then(() => res.redirect('/me/trash/courses?message=delete-course-success'))
+                    .catch(next);
+                break;
+            default:
+                res.status(400).send('Invalid action');
+        }
+    }
 }
 
 module.exports = new CourseController();
